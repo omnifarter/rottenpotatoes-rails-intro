@@ -9,7 +9,11 @@ class MoviesController < ApplicationController
   def index
     @all_ratings = Movie.all_ratings
       @ratings_to_show_hash = params['ratings'] || {}
+      @sorting = params['sort']
       @movies = Movie.with_ratings(params['ratings'])
+      if params['sort']
+        @movies = @movies.order(params['sort'])
+      end
   end
   def new
     # default: render 'new' template
