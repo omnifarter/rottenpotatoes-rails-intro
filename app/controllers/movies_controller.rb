@@ -15,7 +15,7 @@ class MoviesController < ApplicationController
       params['sort'] = session[:sort]
     end
     @all_ratings = Movie.all_ratings
-    @ratings_to_show_hash = params['ratings'] || {}
+    @ratings_to_show_hash = params['ratings'] || {'G':1,'PG':1,'PG-13':1,'R':1}
     @sorting = params['sort']
     @movies = Movie.with_ratings(params['ratings'])
     if params['sort']
