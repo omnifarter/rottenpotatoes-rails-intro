@@ -7,13 +7,22 @@ class MoviesController < ApplicationController
   end
 
   def index
+    # we only set to load from session if there was no ratings params, and it wasn't from a refresh of ratings
+    if params['ratings'] == nil and session[:ratings] and params['commit'] != 'Refresh'
+      params['ratings'] = session[:ratings]
+    end
+    if params['sort'] == nil and session[:sort]
+      params['sort'] = session[:sort]
+    end
     @all_ratings = Movie.all_ratings
-      @ratings_to_show_hash = params['ratings'] || {}
-      @sorting = params['sort']
-      @movies = Movie.with_ratings(params['ratings'])
-      if params['sort']
-        @movies = @movies.order(params['sort'])
-      end
+    @ratings_to_show_hash = params['ratings'] || {}
+    @sorting = params['sort']
+    @movies = Movie.with_ratings(params['ratings'])
+    if params['sort']
+      @movies = @movies.order(params['sort'])
+    end
+   session[:sort] = params['sort']
+   session[:ratings] = params['ratings']
   end
   def new
     # default: render 'new' template
